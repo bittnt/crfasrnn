@@ -1,4 +1,5 @@
 # CRF-RNN for Semantic Image Segmentation
+Experimental version with the latest caffe
 ![sample](sample.png)
 
 [![License (3-Clause BSD)](https://img.shields.io/badge/license-BSD%203--Clause-brightgreen.svg?style=flat-square)](https://github.com/torrvision/crfasrnn/blob/master/LICENSE)
