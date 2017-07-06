@@ -546,6 +546,7 @@ layer {
     bias_term: false
     kernel_size: 4
     stride: 2
+    weight_filler: { type: "bilinear" }
   }
 }
 layer {
@@ -592,6 +593,7 @@ layer {
     bias_term: false
     kernel_size: 16
     stride: 8
+    weight_filler: { type: "bilinear" }
   }
 }
 layer { type: 'Crop' name: 'crop' bottom: 'bigscore' bottom: 'data' top: 'coarse' }
@@ -600,13 +602,15 @@ layer { type: 'Split' name: 'splitting'
   bottom: 'coarse' top: 'unary' top: 'Q0'
 }
 
+
+
 layer {
   name: "inference1"#if you set name "inference1", code will load parameters from caffemodel.
   type: "MultiStageMeanfield"
   bottom: "unary"
   bottom: "Q0"
   bottom: "data"
-  top: "pred"
+  top: "crfscore"
   param {
     lr_mult: 10000#learning rate for W_G
   }
@@ -617,14 +621,14 @@ layer {
   lr_mult: 1000 #learning rate for compatiblity transform matrix
   }
   multi_stage_meanfield_param {
-   num_iterations: 10
-   compatibility_mode: POTTS#Initialize the compatilibity transform matrix with a matrix whose diagonal is -1.
-   threshold: 2
-   theta_alpha: 160
-   theta_beta: 3
-   theta_gamma: 3
-   spatial_filter_weight: 3
-   bilateral_filter_weight: 5
-  }
+    spatial_filter_weights_str: "3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3"
+    bilateral_filter_weights_str: "5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5"
+    num_iterations: 5
+    compatibility_mode: POTTS
+    threshold: 2
+    theta_alpha: 160
+    theta_beta: 3
+    theta_gamma: 3
+   }
 }
 
